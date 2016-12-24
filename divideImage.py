@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-import image_slicer
 
 """
 This function is used to divide the image in n x m parts
@@ -23,7 +22,7 @@ format of subImages:
       subImages[0]['y']
 
 """
-def divide(img , n , m):
+def divideImage(img , n , m):
     height , width = img.shape
     # print("height is " ,height," width is " , width)
     n_step = height//n
@@ -58,11 +57,15 @@ def divide(img , n , m):
     return img, parts
 
 
+def getSubImageData(img , part):
+    x1 ,x2 , y1,y2 =  part['x'][0] ,part['x'][1]  , part["y"][0] , part["y"][1]
+    return img[x1:x2,y1:y2]
+
 
 img = cv2.imread('sample.png', 0)
 n=3
 m=3
-img , parts = divide(img , n , m)
+img , parts = divideImage(img , n , m)
 part = parts[0]
 for part in parts:
     x1 ,x2 , y1,y2 =  part['x'][0] ,part['x'][1]  , part["y"][0] , part["y"][1]
