@@ -2,6 +2,7 @@ import os
 import numpy as np
 import math
 import cv2
+import _pickle as cPickle
 from skimage.io import sift
 
 """
@@ -95,53 +96,85 @@ def getTrainingImagesPaths(Model="Model(B)",Font = "Simplified Arabic"):
     ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
     Model = "Model(B)"
     Font = "Simplified Arabic"
-    # newpath = ROOT_DIR + str("\image dataset\PAC-NF\\") + str(Model) + '\\' + str(Font) + '\\'
-    newpath = "C:\\Users\Maher\Desktop\PAC-NF\PAC-NF\\" + str(Model) + '\\' + str(Font) + '\\'
+    newpath = ROOT_DIR + str("\image dataset\PAC-NF\\") + str(Model) + '\\' + str(Font) + '\\'
+    #newpath = "C:\\Users\Maher\Desktop\PAC-NF\PAC-NF\\" + str(Model) + '\\' + str(Font) + '\\'
 
     paths = []
 
-    for i in range(1, 30):
+    for i in range(1, 2):
         newpath2 = str(newpath) + str(i) + '\\'
         for j in range(1, 5):
             newpath3 = str(newpath2) + str(j) + '\\'
             # print(newpath3)
             if os.path.exists(newpath3):
                 newpath4 = str(newpath3) + "n\\"
-                newpath5 = str(newpath4) + "1.png"
+                newpath5 = str(newpath4) + "2.png"
                 paths.append(newpath5)
     return paths
 
 def getSubImageData(img , part):
-    print(part)
     x1 ,x2 , y1,y2 =  part['x'][0] , part['x'][1]  , part["y"][0] , part["y"][1]
     return img[x1:x2,y1:y2]
 
+def pickle_keypoints(keypoints, descriptors):
+    i = 0
+    temp_array = []
+    for point in keypoints:
+        temp = (point.pt, point.size, point.angle, point.response, point.octave,
+        point.class_id, descriptors[i])
+        ++i
+        temp_array.append(temp)
+    return temp_array
+
+def unpickle_keypoints(array):
+    total = []
+    try:
+        for sub in array:
+            # if sub is None:
+            #     continue
+            keypoints = []
+            descriptors = []
+            for point in sub:
+                temp_feature = cv2.KeyPoint(x=point[0][0],y=point[0][1],_size=point[1], _angle=point[2], _response=point[3], _octave=point[4], _class_id=point[5])
+                temp_descriptor = point[6]
+                keypoints.append(temp_feature)
+                descriptors.append(temp_descriptor)
+            total.append((keypoints, np.array(descriptors)))
+    except:
+        pass
+    return total
 
 
 
 
 trainingDataPaths = getTrainingImagesPaths()
-
+temp_array = []
 for path in trainingDataPaths:
-    img = cv2.imread(path , 0)
-    paddedImage = addPadding(img , 50 , 50)
-    n = 3
-    m = 3
-    parts = divideImage(paddedImage , n,m)
-    for part in parts:
+     img = cv2.imread(path , 0)
+     paddedImage = addPadding(img , 50 , 50)
+     n = 3
+     m = 3
+     parts = divideImage(paddedImage , n,m)
+     temp2_array = []
+     for part in parts:
         subImage = getSubImageData(paddedImage , part)
-
         # Initiate SIFT detector
-        sift.
         sift = cv2.xfeatures2d.SIFT_create()
-        # kp1, des1 = sift.detectAndCompute(subImage, None)
-        # print(kp1)
-        # print(des1)
+        kp1, des1 = sift.detectAndCompute(subImage, None)
+        temp = pickle_keypoints(kp1, des1)
+        temp2_array.append(temp)
+        # Initiate ORB detector
+       # orb = cv2.ORB_create()
+        # find the keypoints and descriptors with ORB
+        #kp1, des1 = orb.detectAndCompute(subImage, None)
 
+     temp_array.append(temp2_array)
+    # print(temp_array)
 
-
-
-
-
-
-
+        #rint(kp1)
+       # print(des1)
+cPickle.dump(temp_array, open("keypoints_database.p", "wb"))
+keypoints_database = cPickle.load(open("keypoints_database.p", "rb"))
+#print(keypoints_database[1])
+kp1, desc1 = unpickle_keypoints(keypoints_database[1])
+# print(len(unpickle_keypoints(keypoints_database[0])))
