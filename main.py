@@ -37,6 +37,48 @@ def addPadding(img, wantedHeightPadding, wantedWidthPadding):
     return paddedImage
 
 
+
+def slidingWindow(img , winWidth , winHeight,shift,shiftDirection=0):
+    imgHeight , imgWidth = img.shape
+    assert winWidth <= imgWidth
+
+    parts = []
+    i = 0
+    nextXEnd  = 0
+    while nextXEnd <= imgWidth :
+        x_start = i*shift
+        x_end =   i*shift + winWidth
+        y_start=  (imgHeight-winHeight)//2
+        y_end =    winHeight - (imgHeight-winHeight)//2
+        if shiftDirection == 0 : # vertical
+            parts.append({"x": (x_start, x_end), "y": (y_start, y_end)})
+
+            #just draw it
+            x1, x2, y1, y2 = x_start , x_end , y_start,y_end ,
+            cv2.imshow('im', img[x1:x2, y1:y2])
+            cv2.waitKey(0)
+        else:# horizantal
+            parts.append({"x": (y_start, y_end), "y": (x_start, x_end)})
+
+            #just draw it
+            x1, x2, y1, y2 = y_start , y_end , x_start,x_end ,
+            cv2.imshow('im', img[x1:x2, y1:y2])
+            cv2.waitKey(0)
+
+        print((x_start , x_end,y_start,y_end))
+        i +=1
+        nextXEnd = ((i+1)*shift + winWidth)
+
+    # for last part
+    x_start = i * shift
+    x_end = imgWidth-1
+    y_start = (imgHeight - winHeight) // 2
+    y_end = winHeight - (imgHeight - winHeight) // 2
+    parts.append({"x": (x_start, x_end), "y": (y_start, y_end)})
+    print(parts)
+    return parts
+
+
 """
 This function is used to divide the image in n x m parts
 
@@ -264,15 +306,17 @@ def getBestMatching(path="test2.png"):
 
 
 
-
-
+img_ = cv2.imread("out.png" , 0)
+cv2.imshow('img', img_)
+slidingWindow(img_,100,280 , 10,shiftDirection=1)
+cv2.waitKey(0)
 
 n = 3
 m = 3
 horizontalPadding = 30
 verticalPadding = 30
-
-getBestMatching()
+#
+# getBestMatching()
 # keypoints_database = cPickle.load(open("keypoints.p", "rb"))
 # print(keypoints_database)
 
