@@ -1,15 +1,14 @@
 import os
 import cv2
 
-from definingCharFromImage import *
 
 def getTrainingImagesPaths(Model="Model(B)", Font="Simplified Arabic"):
     ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
     Model = "Model(B)"
-    Font = "Simplified Arabic"
+    #Font = "Simplified Arabic"
     # newpath = ROOT_DIR + str("\image dataset\PAC-NF\\") + str(Model) + '\\' + str(Font) + '\\'
     # newpath = "C:\\Users\Maher\Desktop\PAC-NF\PAC-NF\\" + str(Model) + '\\' + str(Font) + '\\'
-    newpath = "C:\\Users\zeiad\Desktop\gam3a\Image Processing\\arabic characters Project\\training data\Model(B)" + '\\' + str(Font) + '\\'
+    newpath = "C:\\Users\zeiad\Documents\GitHub\\training data\Model(B)" + '\\' + str(Font) + '\\'
 
     pathsAlph = []
 
@@ -45,10 +44,10 @@ def getTrainingImagesPaths(Model="Model(B)", Font="Simplified Arabic"):
 def getTestingImagesPaths(Model="Model(B)", Font="Simplified Arabic"):
     ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
     Model = "Model(B)"
-    Font = "Simplified Arabic"
+    #Font = "Simplified Arabic"
     # newpath = ROOT_DIR + str("\image dataset\PAC-NF\\") + str(Model) + '\\' + str(Font) + '\\'
     # newpath = "C:\\Users\Maher\Desktop\PAC-NF\PAC-NF\\" + str(Model) + '\\' + str(Font) + '\\'
-    newpath = "C:\\Users\zeiad\Desktop\gam3a\Image Processing\\arabic characters Project\\training data\Model(B)" + '\\' + str(Font) + '\\'
+    newpath = "C:\\Users\zeiad\Documents\GitHub\\training data\Model(B)" + '\\' + str(Font) + '\\'
 
     pathsAlph = []
     charTypes = [ "b","i", "bi"]

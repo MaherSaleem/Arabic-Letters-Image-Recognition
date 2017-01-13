@@ -4,21 +4,21 @@ from dividingImage import *
 from pickleAndUnpickle import *
 from testingAndTrainingPaths import *
 from settings import *
-from definingCharFromImage import *
+from printDataBase import *
 from skimage.io import sift
 from matplotlib import pyplot as plt
 import random
 import operator
 
 
-def getBestMatching(path="test2.png"):
+def getBestMatching(path="test2.png", keyPointsFile="keypoints.p"):
 
     img = cv2.imread(path, 0)
-    cv2.imshow('img', img)
+    # cv2.imshow('img', img)
     paddedImage = addPadding(img, horizontalPadding, verticalPadding)
     parts = divideImage(paddedImage, n, m)
 
-    keypoints_database = cPickle.load(open("keypoints.p", "rb"))
+    keypoints_database = cPickle.load(open(keyPointsFile, "rb"))
     ImagePartsKeyPoints_array = []
     for part in parts:
         subImage = getSubImageData(paddedImage, part)
@@ -30,38 +30,45 @@ def getBestMatching(path="test2.png"):
         kp, des = sift.detectAndCompute(subImage, None)
         ImagePartsKeyPoints_array.append([kp, des])
     numberOfMatchingWithEachTrainingCharDict={}
-    for charIndex, eachChar in enumerate(keypoints_database):
-        for shapeIndex, eachShape in enumerate(eachChar):
-            totalNumberOfMatching=0
-            shapePartsKeypoints = unpickle_keypoints(
-                keypoints_database[charIndex][shapeIndex])  # M*N parts of a training image
-            # Comparing each part in the testing image with each part of the current training image
-            for i in range(n * m):
+    for fontIndex, eachFont in enumerate(keypoints_database):
+        for charIndex, eachChar in enumerate(eachFont):
+            for shapeIndex, eachShape in enumerate(eachChar):
+                totalNumberOfMatching=0
+                shapePartsKeypoints = unpickle_keypoints(
+                    keypoints_database[fontIndex][charIndex][shapeIndex])  # M*N parts of a training image
+                # Comparing each part in the testing image with each part of the current training image
+                for i in range(n * m):
 
-                # TODO: MAHER's part
-                # print("hh")
-                # kp1, des1 = ImagePartsKeyPoints_array[i]
-                # kp2, des2 = shapePartsKeypoints[i]
-                # if (not kp1 or not kp2):
-                #     print("#num of matched is 0")
-                #     continue
-                # create BFMatcher object
-                bf = cv2.BFMatcher()
-                # print(des1)
-                # print(kp2, des2)
-                # matches = bf.knnMatch(des1, des2, 2)  # it return best two matches m and n as DMatch obj
-                # print("WRONG")
-                # good = []
-                # Thr = 0.75
-                # for a, b in matches:
-                #     if a.distance < Thr * b.distance:  # check if first keypoint m is better than n to take it
-                #         good.append([a])
-                # print("num of matched", len(good))
-                #TODO: assuming that there is (matched) number of keypoints that matched in part i
-                matched = random.randint(0, 3)
-                totalNumberOfMatching+=matched
-            trainingChar = getCharByIndex(charIndex)+" "+getPostionByIndex(shapeIndex)
-            numberOfMatchingWithEachTrainingCharDict[str(trainingChar)] = totalNumberOfMatching
+                    # TODO: MAHER's part
+                    kp1, des1 = ImagePartsKeyPoints_array[i]
+                    kp2, des2 = shapePartsKeypoints[i]  # from training data
+                    if (not kp1 or not kp2):
+                        # print("#num of matched is 0")  # since no keypoints
+                        continue
+
+                    des2 = np.array(des2)
+
+                    # create BFMatcher object
+                    bf = cv2.BFMatcher()
+                    matches = bf.knnMatch(des1, des2, k=2)  # it return best two matches m and n as DMatch obj
+                    good = []
+                    Thr = 0.75
+                    for twoMatched in matches:
+                        if len(twoMatched) == 1:  # one best match
+                            a = twoMatched[0]
+                            good.append([a])
+                        else:
+                            a, b = twoMatched
+                            if a.distance < Thr * b.distance:  # check if first keypoint m is better than n to take it
+                                good.append([a])
+                    # print("num of matched", len(good))
+
+                    #TODO: assuming that there is (matched) number of keypoints that matched in part i
+                    # matched = random.randint(0, 3)
+                    matched=len(good)
+                    totalNumberOfMatching+=matched
+                trainingChar = getFontNameByIndex(fontIndex)+" "+getCharByIndex(charIndex)+" "+getPostionByIndex(shapeIndex)
+                numberOfMatchingWithEachTrainingCharDict[str(trainingChar)] = totalNumberOfMatching
 
     #sorting according to the key:
     # sorted_numberOfMatchingWithEachTrainingCharDict = sorted(numberOfMatchingWithEachTrainingCharDict.items(), key=operator.itemgetter(0))
