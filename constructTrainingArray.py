@@ -8,14 +8,8 @@ from skimage.io import sift
 from matplotlib import pyplot as plt
 
 
-
-
-
-
-def constructTrainingArray(keyPointsFileName, partitioningType):
-    print("Constructing the database:")
-    fontsList=["AdvertisingBold", "andalus", "Arabic Transparent", "DecoType Naskh","DecoType Thuluth","Diwani Letter",
-               "M Unicode Sara","Simplified Arabic"]
+def constructTrainingArray(fontsList, keyPointsFileName, partitioningType, constantWindowParameters, slidingWindowParameters):
+    print("Constructing the database...")
     trainingDataPathsForAllFonts = []
     for font in fontsList:
         trainingDataPathsForOneFont = getTrainingImagesPaths(Font=font)
@@ -35,10 +29,13 @@ def constructTrainingArray(keyPointsFileName, partitioningType):
                 paddedImage = addPadding(img, horizontalPadding, verticalPadding)
                 # cv2.imshow('img'+str(i+1),paddedImage)
                 # cv2.waitKey(0)
-                if partitioningType=="constant":
-                    parts = divideImage(paddedImage, n, m)
-                # elif partitioningType == "sliding":
-                #     parts = slidingWindow(paddedImage)
+                if partitioningType == "constant":
+                    parts = divideImage(paddedImage, constantWindowParameters["n"], constantWindowParameters["m"])
+                elif partitioningType == "sliding":
+                    parts = slidingWindow(paddedImage, slidingWindowParameters["winWidth"]
+                                          , slidingWindowParameters["winHeight"],
+                                          slidingWindowParameters["shift"],
+                                          slidingWindowParameters["shiftDirection"])
 
                 ImagePartsKeyPoints_array = []
                 for part in parts:
@@ -58,4 +55,4 @@ def constructTrainingArray(keyPointsFileName, partitioningType):
         listForAllFonts.append(listForFont)
     # print(listForAllFonts[0][1])
     storeToFile(keyPointsFileName, listForAllFonts)
-    print("Database is successfully constructed")
+    print("Database is successfully constructed.")

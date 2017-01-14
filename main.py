@@ -4,40 +4,89 @@ import sys
 from constructTrainingArray import *
 from getBestMatching import *
 from testingAndTrainingPaths import *
+from measurements import *
 
-
-def getMeasurements(aboveThresholdArray, ImagePath):
-    Char, position = getCharWithPositionFromPath(ImagePath)
-    charString = getCharByIndex(int(Char) - 1) + " " + getPostionByIndex(int(position)-1)
-    TP = 0
-    for key in aboveThresholdArray:
-        if charString in key:
-            TP+=1
-
-    return TP
-#=======================================================================================================================
 
 keyPointsFileName = "keypoints_staticWindow_1.p"
-# constructTrainingArray(keyPointsFileName, "constant")
+fontsList = ["AdvertisingBold", "andalus", "Arabic Transparent", "DecoType Naskh", "DecoType Thuluth", "Diwani Letter",
+             "M Unicode Sara", "Simplified Arabic"]
 
-testingPaths = getTestingImagesPaths()
+slidingWindowParameters = {
+    "winWidth": 5,
+    "winHeight": 5,
+    "shift": 10,
+    "shiftDirection": 0
+}
+
+constantWindowParameters = {
+    "m": m,
+    "n": n
+}
+
+# constructTrainingArray(fontsList, keyPointsFileName, "constant", constantWindowParameters, slidingWindowParameters)
+
+testingPaths = getTestingImagesPaths(Model="Model(B)", Font="Tahoma")
 
 thresholdForNumberOfMatchedKeypoints = 7
-TP=0
-for testingImagePathArray in testingPaths[:3]:
+
+normalMeasurements = {
+    "totalTP": 0,
+    "totalTN": 0,
+    "totalFP": 0,
+    "totalFN": 0
+}
+familiesMeasurements = {
+    "totalTP": 0,
+    "totalTN": 0,
+    "totalFP": 0,
+    "totalFN": 0
+}
+
+print("\n\ncalculating measurements for the testing dataset...")
+for testingImagePathArray in testingPaths:
     for testingImagePath in testingImagePathArray:
-        print("#"*50)
+        # print("#"*50)
         Char, position = getCharWithPositionFromPath(testingImagePath)
-        print(getCharByIndex(int(Char) - 1) + " " + getPostionByIndex(int(position)-1), ":")
+        # print(getCharByIndex(int(Char) - 1) + " " + getPostionByIndex(int(position)-1), ":")
 
         #array of tuples: (key,value)
-        numberOfMatchingWithEachTrainingCharArray = getBestMatching(testingImagePath, keyPointsFileName)
+        numberOfMatchingWithEachTrainingCharArray = getBestMatching(testingImagePath, keyPointsFileName, "constant",
+                                                                    constantWindowParameters, slidingWindowParameters)
         CharsWithMatchingAboveThreshold={}
         for key,value in numberOfMatchingWithEachTrainingCharArray:
             if value >=thresholdForNumberOfMatchedKeypoints:
                 CharsWithMatchingAboveThreshold[key]=value
-        print(CharsWithMatchingAboveThreshold)
+        # print(CharsWithMatchingAboveThreshold)
 
-        TP+=getMeasurements(CharsWithMatchingAboveThreshold.keys(),testingImagePath)
+        TP, TN, FP, FN = getMeasurements(CharsWithMatchingAboveThreshold.keys(), testingImagePath, len(fontsList), len(testingPaths))
+        familiesMeasurements["totalTP"] += TP
+        familiesMeasurements["totalTN"] += TN
+        familiesMeasurements["totalFN"] += FN
+        familiesMeasurements["totalFP"] += FP
 
-print(TP)
+        TP, TN, FP, FN = getMeasurementsForFamilies(CharsWithMatchingAboveThreshold.keys(), testingImagePath, len(fontsList),
+                                         len(testingPaths))
+        normalMeasurements["totalTP"] += TP
+        normalMeasurements["totalTN"] += TN
+        normalMeasurements["totalFN"] += FN
+        normalMeasurements["totalFP"] += FP
+
+print("NORMAL MEASUREMENTS:")
+evaluateResults(familiesMeasurements["totalTP"], familiesMeasurements["totalTN"], familiesMeasurements["totalFP"], familiesMeasurements["totalFN"])
+print("#"*30)
+print("MEASUREMENTS FOR FAMILIES:")
+evaluateResults(normalMeasurements["totalTP"], normalMeasurements["totalTN"], normalMeasurements["totalFP"], normalMeasurements["totalFN"])
+
+
+
+
+
+
+
+
+# Char = getFontNameByIndex(2)+"-"+getCharByIndex(2)+" "+getPostionByIndex(2)
+# print(Char)
+# trainingChar = str(Char).split("-")[1].split(" ")[0]
+# print(trainingChar)
+# trainingGroupIndex = getGroupbyChar(trainingChar)
+# print(trainingGroupIndex)

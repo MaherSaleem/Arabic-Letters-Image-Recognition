@@ -11,12 +11,19 @@ import random
 import operator
 
 
-def getBestMatching(path="test2.png", keyPointsFile="keypoints.p"):
+def getBestMatching(path, keyPointsFile, partitioningType, constantWindowParameters, slidingWindowParameters):
 
     img = cv2.imread(path, 0)
     # cv2.imshow('img', img)
     paddedImage = addPadding(img, horizontalPadding, verticalPadding)
-    parts = divideImage(paddedImage, n, m)
+    # parts = divideImage(paddedImage, n, m)
+    if partitioningType == "constant":
+        parts = divideImage(paddedImage, constantWindowParameters["n"], constantWindowParameters["m"])
+    elif partitioningType == "sliding":
+        parts = slidingWindow(paddedImage, slidingWindowParameters["winWidth"]
+                              , slidingWindowParameters["winHeight"],
+                              slidingWindowParameters["shift"],
+                              slidingWindowParameters["shiftDirection"])
 
     keypoints_database = cPickle.load(open(keyPointsFile, "rb"))
     ImagePartsKeyPoints_array = []
@@ -67,7 +74,7 @@ def getBestMatching(path="test2.png", keyPointsFile="keypoints.p"):
                     # matched = random.randint(0, 3)
                     matched=len(good)
                     totalNumberOfMatching+=matched
-                trainingChar = getFontNameByIndex(fontIndex)+" "+getCharByIndex(charIndex)+" "+getPostionByIndex(shapeIndex)
+                trainingChar = getFontNameByIndex(fontIndex)+"-"+getCharByIndex(charIndex)+" "+getPostionByIndex(shapeIndex)
                 numberOfMatchingWithEachTrainingCharDict[str(trainingChar)] = totalNumberOfMatching
 
     #sorting according to the key:

@@ -9,7 +9,7 @@ from pickleAndUnpickle import *
 
 
 
-
+#starts from 0 => 'ا'
 def getCharByIndex(index):
 
     if index == 27: return "ي"
