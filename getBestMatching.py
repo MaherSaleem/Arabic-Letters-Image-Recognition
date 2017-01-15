@@ -11,7 +11,7 @@ import random
 import operator
 
 
-def getBestMatching(path, keyPointsFile, partitioningType, constantWindowParameters, slidingWindowParameters):
+def getBestMatching(path, keypoints_database, partitioningType, constantWindowParameters, slidingWindowParameters):
 
     img = cv2.imread(path, 0)
     # cv2.imshow('img', img)
@@ -25,7 +25,7 @@ def getBestMatching(path, keyPointsFile, partitioningType, constantWindowParamet
                               slidingWindowParameters["shift"],
                               slidingWindowParameters["shiftDirection"])
 
-    keypoints_database = cPickle.load(open(keyPointsFile, "rb"))
+    # keypoints_database = cPickle.load(open(keyPointsFile, "rb"))
     ImagePartsKeyPoints_array = []
     for part in parts:
         subImage = getSubImageData(paddedImage, part)

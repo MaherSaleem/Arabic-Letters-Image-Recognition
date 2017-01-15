@@ -25,6 +25,11 @@ constantWindowParameters = {
 
 # constructTrainingArray(fontsList, keyPointsFileName, "constant", constantWindowParameters, slidingWindowParameters)
 
+keypoints_database = cPickle.load(open(keyPointsFileName, "rb"))
+
+databaseSize = getDatabaseSize(keypoints_database)
+
+
 testingPaths = getTestingImagesPaths(Model="Model(B)", Font="Tahoma")
 
 thresholdForNumberOfMatchedKeypoints = 7
@@ -44,13 +49,14 @@ familiesMeasurements = {
 
 print("\n\ncalculating measurements for the testing dataset...")
 for testingImagePathArray in testingPaths:
+    # print(testingImagePathArray)
     for testingImagePath in testingImagePathArray:
-        # print("#"*50)
+        # print(testingImagePath)
         Char, position = getCharWithPositionFromPath(testingImagePath)
         # print(getCharByIndex(int(Char) - 1) + " " + getPostionByIndex(int(position)-1), ":")
 
         #array of tuples: (key,value)
-        numberOfMatchingWithEachTrainingCharArray = getBestMatching(testingImagePath, keyPointsFileName, "constant",
+        numberOfMatchingWithEachTrainingCharArray = getBestMatching(testingImagePath, keypoints_database, "constant",
                                                                     constantWindowParameters, slidingWindowParameters)
         CharsWithMatchingAboveThreshold={}
         for key,value in numberOfMatchingWithEachTrainingCharArray:
@@ -58,24 +64,24 @@ for testingImagePathArray in testingPaths:
                 CharsWithMatchingAboveThreshold[key]=value
         # print(CharsWithMatchingAboveThreshold)
 
-        TP, TN, FP, FN = getMeasurements(CharsWithMatchingAboveThreshold.keys(), testingImagePath, len(fontsList), len(testingPaths))
+        TP, TN, FP, FN = getMeasurements(CharsWithMatchingAboveThreshold.keys(), testingImagePath, len(fontsList), databaseSize)
         familiesMeasurements["totalTP"] += TP
         familiesMeasurements["totalTN"] += TN
         familiesMeasurements["totalFN"] += FN
         familiesMeasurements["totalFP"] += FP
 
         TP, TN, FP, FN = getMeasurementsForFamilies(CharsWithMatchingAboveThreshold.keys(), testingImagePath, len(fontsList),
-                                         len(testingPaths))
+                                                    databaseSize)
         normalMeasurements["totalTP"] += TP
         normalMeasurements["totalTN"] += TN
         normalMeasurements["totalFN"] += FN
         normalMeasurements["totalFP"] += FP
 
-print("NORMAL MEASUREMENTS:")
-evaluateResults(familiesMeasurements["totalTP"], familiesMeasurements["totalTN"], familiesMeasurements["totalFP"], familiesMeasurements["totalFN"])
+print("NORMAL MEASUREMENTS:(databaseSize="+str(databaseSize)+")")
+evaluateResults(normalMeasurements["totalTP"], normalMeasurements["totalTN"], normalMeasurements["totalFP"], normalMeasurements["totalFN"])
 print("#"*30)
 print("MEASUREMENTS FOR FAMILIES:")
-evaluateResults(normalMeasurements["totalTP"], normalMeasurements["totalTN"], normalMeasurements["totalFP"], normalMeasurements["totalFN"])
+evaluateResults(familiesMeasurements["totalTP"], familiesMeasurements["totalTN"], familiesMeasurements["totalFP"], familiesMeasurements["totalFN"])
 
 
 

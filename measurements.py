@@ -1,6 +1,18 @@
 from printDataBase import *
 
 
+def getDatabaseSize(keypoints_database):
+
+    databaseSize=0
+    for  eachFont in keypoints_database:
+        for  eachChar in eachFont:
+            for eachShape in eachChar:
+                databaseSize +=1
+    return databaseSize
+
+#=======================================================================================================================
+
+
 #starts from 0 => 'ا'
 def getGroupbyIndex(index):
     groups = [
@@ -84,7 +96,7 @@ def evaluateResults(TP , TN , FP , FN):
 # which represents the best matched characters
 
 
-def getMeasurementsForFamilies(aboveThresholdArray, ImagePath, numberOfFonts, testingDataSetLength ):
+def getMeasurementsForFamilies(aboveThresholdArray, ImagePath, numberOfFonts, DataSetLength ):
 
     Char, position = getCharWithPositionFromPath(ImagePath)
     charString = getCharByIndex(int(Char) - 1) + " " + getPostionByIndex(int(position)-1)
@@ -105,13 +117,13 @@ def getMeasurementsForFamilies(aboveThresholdArray, ImagePath, numberOfFonts, te
     FN = numberOfFonts - TP
 
     # TN = total number of testing dataset - (TP + FP + FN)
-    TN = testingDataSetLength - (TP + FP + FN)
+    TN = DataSetLength - (TP + FP + FN)
 
     return TP, TN, FP, FN
 #=======================================================================================================================
 
 
-def getMeasurements(aboveThresholdArray, ImagePath, numberOfFonts, testingDataSetLength ):
+def getMeasurements(aboveThresholdArray, ImagePath, numberOfFonts, DataSetLength ):
 
     Char, position = getCharWithPositionFromPath(ImagePath)
     charString = getCharByIndex(int(Char) - 1) + " " + getPostionByIndex(int(position)-1)
@@ -128,7 +140,7 @@ def getMeasurements(aboveThresholdArray, ImagePath, numberOfFonts, testingDataSe
     FN = numberOfFonts - TP
 
     # TN = total number of testing dataset - (TP + FP + FN)
-    TN = testingDataSetLength - (TP + FP + FN)
+    TN = DataSetLength - (TP + FP + FN)
 
     return TP, TN, FP, FN
 
