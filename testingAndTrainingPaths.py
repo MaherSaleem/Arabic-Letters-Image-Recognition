@@ -50,7 +50,7 @@ def getTestingImagesPaths(Model="Model(B)", Font="Simplified Arabic"):
     newpath = "C:\\Users\zeiad\Documents\GitHub\\training data\Model(B)" + '\\' + str(Font) + '\\'
 
     pathsAlph = []
-    charTypes = [ "b","i", "bi"]
+    charTypes = ["b","i","bi","n"]
 
     for i in range(1, 30):
         pathsForOneChar = []
@@ -64,11 +64,15 @@ def getTestingImagesPaths(Model="Model(B)", Font="Simplified Arabic"):
             if os.path.exists(newpath3):
                 if  os.listdir(newpath3) :
                     for i,type in enumerate(charTypes):
+                        charType = str(i+1)
+                        if(type == "n"):
+                            charType =''
+
                         newpath4 = str(newpath3) + str(type) + "\\"
                         # print(newpath4)
                         while (1):
-                            newpath5 = str(newpath4) +str(i+1)+ str(imageIndex) + ".png"
-
+                            newpath5 = str(newpath4) +charType+ str(imageIndex) + ".png"
+                            # print(newpath5)
                             img = cv2.imread(newpath5, 0)
                             if (img.shape[0] > 30 or img.shape[1] > 30):
                                 imageIndex += 1

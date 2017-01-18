@@ -14,7 +14,9 @@ def getDatabaseSize(keypoints_database):
 
 
 #starts from 0 => 'ا'
-def getGroupbyIndex(index):
+def getGroupbyIndex(index , querySahpe=0 , testShape=0):
+
+
     groups = [
         (1,2,3), #ba
         (4,5,6), # 7a
@@ -26,16 +28,26 @@ def getGroupbyIndex(index):
         (17,18),#3een
         (19 , 20)#fa
     ]
+    grpIdx=-1
+    grpLen=1
+
     for groupIndex,group in enumerate(groups):
         if index in group:
-            return groupIndex
-    return -1 # there is no group
+            # print(group)
+            grpIdx,grpLen= groupIndex, len(group)
+            break
+
+    if querySahpe != testShape: return -1, grpLen
+
+    return grpIdx, grpLen # there is no group
 
 
 #=======================================================================================================================
 
 
-def getGroupbyChar(char):
+def getGroupbyChar(char , querySahpe=0 , testShape=0):
+    if querySahpe != testShape :return -1
+
     groups = [
         (1,2,3), #ba
         (4,5,6), # 7a
@@ -83,9 +95,9 @@ def evaluateResults(TP , TN , FP , FN):
     a = accuracy(TP,TN,FP,FN)
     r = recall(TP,FN)
     p = precision(TP,FP)
-    print("Accuracy = " , a )
-    print("Recall  =" , r)
-    print("Precision = " , p )
+    print("Accuracy = " ,"{0:.3f}".format(a))
+    print("Recall  =" ,"{0:.3f}".format(r) )
+    print("Precision = " , "{0:.3f}".format(p) )
     return a,r,p # returned if they needed in any stage
 
 # evaluateResults(50,20,30,10)
@@ -98,23 +110,40 @@ def evaluateResults(TP , TN , FP , FN):
 
 def getMeasurementsForFamilies(aboveThresholdArray, ImagePath, numberOfFonts, DataSetLength ):
 
-    Char, position = getCharWithPositionFromPath(ImagePath)
+    Char, position = getCharWithPositionFromPath(ImagePath)#returns position from the path 1=> 'ا'
     charString = getCharByIndex(int(Char) - 1) + " " + getPostionByIndex(int(position)-1)
-    testingGroupIndex = getGroupbyIndex(int(Char)-1)
+
+
+
     TP = 0
     # TP will be the number of entries in the array that are axactly the same as the query image (eventhough different font type)
     for key in aboveThresholdArray:
-        trainingChar = str(key).split("-")[1].split(" ")[0]
+        charWithPosition=str(key).split("-")[1].split(" ")
+        trainingChar = charWithPosition[0]
+        trainingPositionString = charWithPosition[1]
+        trainingPositionIndex=getIndexByPosition(trainingPositionString)
+        # print((int(position)-1))
+
         trainingGroupIndex = getGroupbyChar(trainingChar)
-        if testingGroupIndex == trainingGroupIndex == -1:
+        testingGroupIndex, groupSize = getGroupbyIndex(int(Char) - 1, querySahpe = trainingPositionIndex, testShape=(int(position)-1))
+        # print(testingGroupIndex)
+        # print(charWithPosition, trainingPositionIndex,trainingGroupIndex,"-------", charString, str(int(position) - 1),testingGroupIndex)
+        #print(charWithPosition,trainingGroupIndex)
+        # print(trainingGroupIndex,testingGroupIndex)
+        # print("training char:",trainingChar)
+        if testingGroupIndex == -1 and trainingGroupIndex == -1:
             continue
         if testingGroupIndex == trainingGroupIndex:
             TP +=1
+            # print(charWithPosition,"----",charString, testingGroupIndex)
+
     # FP will be the rest of the entries in the previous array
     FP = len(aboveThresholdArray)-TP
 
     # FN = (number of fonts in the training set) - TP
-    FN = numberOfFonts - TP
+    FN = numberOfFonts * groupSize - TP
+    # if FN <0:
+    #     print(TP,numberOfFonts * groupSize)
 
     # TN = total number of testing dataset - (TP + FP + FN)
     TN = DataSetLength - (TP + FP + FN)

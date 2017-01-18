@@ -19,17 +19,17 @@ def slidingWindow(img, winWidth, winHeight, shift, shiftDirection=0):
 
             # just draw it
             x1, x2, y1, y2 = x_start, x_end, y_start, y_end,
-            cv2.imshow('im', img[x1:x2, y1:y2])
-            cv2.waitKey(0)
+            # cv2.imshow('im', img[x1:x2, y1:y2])
+            # cv2.waitKey(0)
         else:  # horizantal
             parts.append({"x": (y_start, y_end), "y": (x_start, x_end)})
 
             # just draw it
             x1, x2, y1, y2 = y_start, y_end, x_start, x_end,
-            cv2.imshow('im', img[x1:x2, y1:y2])
-            cv2.waitKey(0)
+            # cv2.imshow('im', img[x1:x2, y1:y2])
+            # cv2.waitKey(0)
 
-        print((x_start, x_end, y_start, y_end))
+        # print((x_start, x_end, y_start, y_end))
         i += 1
         nextXEnd = ((i + 1) * shift + winWidth)
 
@@ -39,7 +39,7 @@ def slidingWindow(img, winWidth, winHeight, shift, shiftDirection=0):
     y_start = (imgHeight - winHeight) // 2
     y_end = winHeight - (imgHeight - winHeight) // 2
     parts.append({"x": (x_start, x_end), "y": (y_start, y_end)})
-    print(parts)
+    # print(parts)
     return parts
 #=======================================================================================================================
 

@@ -1,4 +1,4 @@
 horizontalPadding = 30
 verticalPadding = 30
-n = 1
+n = 2
 m = 1

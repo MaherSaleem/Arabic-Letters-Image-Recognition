@@ -83,7 +83,7 @@ def getBestMatching(path, keypoints_database, partitioningType, constantWindowPa
     #sorting according to the value:
     sorted_numberOfMatchingWithEachTrainingCharDict = sorted(numberOfMatchingWithEachTrainingCharDict.items(), key=operator.itemgetter(1))
 
-    #the sorted becomes array of tuples (key,value)
+    # the sorted becomes array of tuples (key,value)
     # for i,j in sorted_numberOfMatchingWithEachTrainingCharDict:
     #     print(i+":"+str(j))
 

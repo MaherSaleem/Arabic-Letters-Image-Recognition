@@ -34,6 +34,9 @@ def getPostionByIndex(index):
     postions = ["البداية" , "الوسط" , "النهاية" , "منعزل"]
     return postions[index]
 
+def getIndexByPosition(position):
+    postions = ["البداية", "الوسط", "النهاية", "منعزل"]
+    return postions.index(position)
 
 def getFontNameByIndex(index):
 
