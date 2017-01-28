@@ -1,0 +1,79 @@
+CONSTANT WINDOW:
+
+1X1
+ExecutionTime: 114.3462963104248
+NORMAL existence Accuracy: 0.24754901960784315
+FAMILIES existence Accuracy: 0.20588235294117646
+##############################
+2X2
+ExecutionTime: 34.042858839035034
+NORMAL existence Accuracy: 0.6421568627450981
+FAMILIES existence Accuracy: 0.5098039215686274
+##############################
+3X3
+ExecutionTime: 18.776683568954468
+NORMAL existence Accuracy: 0.7083333333333334
+FAMILIES existence Accuracy: 0.5490196078431373
+##############################
+4X4
+ExecutionTime: 14.542534589767456
+NORMAL existence Accuracy: 0.7720588235294118
+FAMILIES existence Accuracy: 0.5686274509803921
+##############################
+5X5
+ExecutionTime: 18.975823163986206
+NORMAL existence Accuracy: 0.9411764705882353
+FAMILIES existence Accuracy: 0.6666666666666666
+****************************************************************************************
+SLIDING WINDOW: (H, W, SH)
+
+30, 10, 5H
+ExecutionTime: 51.755815505981445
+NORMAL existence Accuracy: 0.8504901960784313
+FAMILIES existence Accuracy: 0.6397058823529411
+##############################
+30, 10, 5V
+ExecutionTime: 43.84320378303528
+NORMAL existence Accuracy: 0.9019607843137255
+FAMILIES existence Accuracy: 0.6617647058823529
+##############################
+30, 10, 2H
+ExecutionTime: 88.93621444702148
+NORMAL existence Accuracy: 0.8504901960784313
+FAMILIES existence Accuracy: 0.6397058823529411
+##############################
+30, 10, 2V
+ExecutionTime: 90.51617217063904
+NORMAL existence Accuracy: 0.9019607843137255
+FAMILIES existence Accuracy: 0.6617647058823529
+##############################
+30, 6, 3H
+ExecutionTime: 25.04184579849243
+NORMAL existence Accuracy: 0.8921568627450981
+FAMILIES existence Accuracy: 0.6348039215686274
+##############################
+30, 6, 3V
+ExecutionTime: 26.172603607177734
+NORMAL existence Accuracy: 0.9362745098039216
+FAMILIES existence Accuracy: 0.6666666666666666
+##############################
+30, 5, 2H
+ExecutionTime: 12.640503406524658
+NORMAL existence Accuracy: 0.9411764705882353
+FAMILIES existence Accuracy: 0.6666666666666666
+##############################
+30, 5, 2V
+ExecutionTime: 12.1359384059906
+NORMAL existence Accuracy: 0.9411764705882353
+FAMILIES existence Accuracy: 0.6666666666666666
+##############################
+20, 5, 2H
+ExecutionTime: 12.447105169296265
+NORMAL existence Accuracy: 0.9411764705882353
+FAMILIES existence Accuracy: 0.6666666666666666
+##############################
+20, 5, 2V
+ExecutionTime: 13.244062423706055
+NORMAL existence Accuracy: 0.9411764705882353
+FAMILIES existence Accuracy: 0.6666666666666666
+##############################
