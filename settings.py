@@ -19,9 +19,9 @@ constantWindowParameters = {
 
 
 # ============================================================
-dividingMethod = "constant"
-mn= str(n) if m == n else str(m)+"_"+str(n)
-keyPointsFileName = "keypoints_staticWindow_"+mn+".p"
+# dividingMethod = "constant"
+# mn= str(n) if m == n else str(m)+"_"+str(n)
+# keyPointsFileName = "keypoints_staticWindow_"+mn+".p"
 # ============================================================
 
 
@@ -30,10 +30,10 @@ shiftDirection = "H" if slidingWindowParameters["shiftDirection"] == 1 else "V"
 
 
 # ============================================================================================================================
-#
-# dividingMethod = "sliding"
-# keyPointsFileName = "keypoints_slidingWindow_w"+str(slidingWindowParameters["winWidth"])+"_h"+str(slidingWindowParameters["winHeight"])+\
-#                     "_sh"+str(slidingWindowParameters["shift"])+"_dir"+shiftDirection+".p"
+
+dividingMethod = "sliding"
+keyPointsFileName = "keypoints_slidingWindow_w"+str(slidingWindowParameters["winWidth"])+"_h"+str(slidingWindowParameters["winHeight"])+\
+                    "_sh"+str(slidingWindowParameters["shift"])+"_dir"+shiftDirection+".p"
 
 # ============================================================================================================================
 

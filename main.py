@@ -123,9 +123,9 @@ print("\nTOTAL EXECUTION TIME : %s seconds" % executionTime)
 #               "\nFAMILIES existence Accuracy: " + str(familiesMeasurements["totalExist"] / totalTests)+"\n"+"#"*30+"\n")
 #
 
-NoOfkeyPointsFileName = "noOfKeypoints_staticWindow_3.txt"
-
-noOfKeypoints(keypoints_database,NoOfkeyPointsFileName)
+# NoOfkeyPointsFileName = "noOfKeypoints_staticWindow_3.txt"
+#
+# noOfKeypoints(keypoints_database,NoOfkeyPointsFileName)
 
 
 
