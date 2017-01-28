@@ -1,34 +1,19 @@
 import os
 import sys
-
+import time
 from constructTrainingArray import *
 from getBestMatching import *
 from testingAndTrainingPaths import *
 from measurements import *
+from noOfkeyPoints import *
 
 
 
-fontsList = ["AdvertisingBold", "andalus", "Arabic Transparent", "DecoType Naskh", "DecoType Thuluth", "Diwani Letter",
-             "M Unicode Sara", "Simplified Arabic"]
+
+# constructTrainingArray(fontsList, keyPointsFileName, dividingMethod, constantWindowParameters, slidingWindowParameters)
 
 
-dividingMethod = "sliding"
-# dividingMethod = "constant"
-keyPointsFileName = "keypoints_slidingWindow_w10_h30_sh5_dirV.p"
-slidingWindowParameters = {
-    "winWidth": 10,
-    "winHeight": 30,
-    "shift": 5,
-    "shiftDirection": 0 # 1=>horizontal 0=>vertical
-}
-
-constantWindowParameters = {
-    "m": m,
-    "n": n
-}
-
-constructTrainingArray(fontsList, keyPointsFileName, dividingMethod, constantWindowParameters, slidingWindowParameters)
-
+start_time =time.time()
 keypoints_database = cPickle.load(open(keyPointsFileName, "rb"))
 
 databaseSize = getDatabaseSize(keypoints_database)
@@ -42,20 +27,26 @@ normalMeasurements = {
     "totalTP": 0,
     "totalTN": 0,
     "totalFP": 0,
-    "totalFN": 0
+    "totalFN": 0,
+    "totalExist": 0
 }
 familiesMeasurements = {
     "totalTP": 0,
     "totalTN": 0,
     "totalFP": 0,
-    "totalFN": 0
+    "totalFN": 0,
+    "totalExist": 0
 }
 
 print("DIVIDING METHOD: "+dividingMethod)
+
+# totalexist=0
+totalTests=0
 print("\n\ncalculating measurements for the testing dataset...")
 for testingImagePathArray in testingPaths:
     # print(testingImagePathArray)
     for testingImagePath in testingImagePathArray:
+        totalTests+=1
         # print(testingImagePath)
         Char, position = getCharWithPositionFromPath(testingImagePath)
         # print("testing char: ",getCharByIndex(int(Char) - 1) + " " + getPostionByIndex(int(position)-1), ":")
@@ -82,7 +73,7 @@ for testingImagePathArray in testingPaths:
         # for char in CharsWithMatchingAboveThreshold:
         #     print(char)
 
-        TP, TN, FP, FN = getMeasurementsForFamilies(CharsWithMatchingAboveThreshold.keys(), testingImagePath,
+        TP, TN, FP, FN, existf = getMeasurementsForFamilies(CharsWithMatchingAboveThreshold.keys(), testingImagePath,
                                                     len(fontsList),
                                                     databaseSize)
 
@@ -90,19 +81,56 @@ for testingImagePathArray in testingPaths:
         familiesMeasurements["totalTN"] += TN
         familiesMeasurements["totalFN"] += FN
         familiesMeasurements["totalFP"] += FP
+        familiesMeasurements["totalExist"] += existf
 
-        TP, TN, FP, FN = getMeasurements(CharsWithMatchingAboveThreshold.keys(), testingImagePath, len(fontsList),
+        TP, TN, FP, FN, exist = getMeasurements(CharsWithMatchingAboveThreshold.keys(), testingImagePath, len(fontsList),
                                          databaseSize)
         normalMeasurements["totalTP"] += TP
         normalMeasurements["totalTN"] += TN
         normalMeasurements["totalFN"] += FN
         normalMeasurements["totalFP"] += FP
+        normalMeasurements["totalExist"] += exist
 
+end_time = time.time()
+
+executionTime = end_time - start_time
 print("NORMAL MEASUREMENTS:(databaseSize="+str(databaseSize)+")")
 evaluateResults(normalMeasurements["totalTP"], normalMeasurements["totalTN"], normalMeasurements["totalFP"], normalMeasurements["totalFN"])
+print("total number of existence: ", normalMeasurements["totalExist"])
+print("total number of tests: ", str(totalTests))
+print("\n\n accuracy of exist = ", normalMeasurements["totalExist"]/totalTests)
 print("#"*30)
 print("MEASUREMENTS FOR FAMILIES:")
 evaluateResults(familiesMeasurements["totalTP"], familiesMeasurements["totalTN"], familiesMeasurements["totalFP"], familiesMeasurements["totalFN"])
+
+print("total number of existence: ", familiesMeasurements["totalExist"])
+print("total number of tests: ", totalTests)
+print("\naccuracy of exist = ", familiesMeasurements["totalExist"]/totalTests)
+
+print("\nTOTAL EXECUTION TIME : %s seconds" % executionTime)
+
+# write some measurements to a file
+
+# filename = "executionTime_normalAccExistence_familiesAccExistenceFile.txt"
+# with open(filename, 'a') as out:
+#     if dividingMethod == "constant":
+#         method = str(constantWindowParameters["m"])+"X"+str(constantWindowParameters["n"])
+#     else:
+#         method = str(slidingWindowParameters["winHeight"])+", "+str(slidingWindowParameters["winWidth"])+", "+\
+#                  str(slidingWindowParameters["shift"])+str(shiftDirection)
+#     out.write(method+"\nExecutionTime: " +
+#               str(executionTime) + "\nNORMAL existence Accuracy: " + str(normalMeasurements["totalExist"]/totalTests)+
+#               "\nFAMILIES existence Accuracy: " + str(familiesMeasurements["totalExist"] / totalTests)+"\n"+"#"*30+"\n")
+#
+
+NoOfkeyPointsFileName = "noOfKeypoints_staticWindow_3.txt"
+
+# noOfKeypoints(keypoints_database,NoOfkeyPointsFileName)
+
+
+
+
+
 
 
 

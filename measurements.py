@@ -113,8 +113,7 @@ def getMeasurementsForFamilies(aboveThresholdArray, ImagePath, numberOfFonts, Da
     Char, position = getCharWithPositionFromPath(ImagePath)#returns position from the path 1=> 'ا'
     charString = getCharByIndex(int(Char) - 1) + " " + getPostionByIndex(int(position)-1)
 
-
-
+    exist = 0
     TP = 0
     # TP will be the number of entries in the array that are axactly the same as the query image (eventhough different font type)
     for key in aboveThresholdArray:
@@ -135,6 +134,7 @@ def getMeasurementsForFamilies(aboveThresholdArray, ImagePath, numberOfFonts, Da
             continue
         if testingGroupIndex == trainingGroupIndex:
             TP +=1
+            exist = 1
             # print(charWithPosition,"----",charString, testingGroupIndex)
 
     # FP will be the rest of the entries in the previous array
@@ -148,7 +148,7 @@ def getMeasurementsForFamilies(aboveThresholdArray, ImagePath, numberOfFonts, Da
     # TN = total number of testing dataset - (TP + FP + FN)
     TN = DataSetLength - (TP + FP + FN)
 
-    return TP, TN, FP, FN
+    return TP, TN, FP, FN, exist
 #=======================================================================================================================
 
 
@@ -157,10 +157,12 @@ def getMeasurements(aboveThresholdArray, ImagePath, numberOfFonts, DataSetLength
     Char, position = getCharWithPositionFromPath(ImagePath)
     charString = getCharByIndex(int(Char) - 1) + " " + getPostionByIndex(int(position)-1)
     TP = 0
+    exist=0
     # TP will be the number of entries in the array that are axactly the same as the query image (eventhough different font type)
     for key in aboveThresholdArray:
         if charString in key:
             TP += 1
+            exist=1
 
     # FP will be the rest of the entries in the previous array
     FP = len(aboveThresholdArray)-TP
@@ -171,6 +173,6 @@ def getMeasurements(aboveThresholdArray, ImagePath, numberOfFonts, DataSetLength
     # TN = total number of testing dataset - (TP + FP + FN)
     TN = DataSetLength - (TP + FP + FN)
 
-    return TP, TN, FP, FN
+    return TP, TN, FP, FN , exist
 
 #=======================================================================================================================
