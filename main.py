@@ -125,7 +125,7 @@ print("\nTOTAL EXECUTION TIME : %s seconds" % executionTime)
 
 NoOfkeyPointsFileName = "noOfKeypoints_staticWindow_3.txt"
 
-# noOfKeypoints(keypoints_database,NoOfkeyPointsFileName)
+noOfKeypoints(keypoints_database,NoOfkeyPointsFileName)
 
 
 

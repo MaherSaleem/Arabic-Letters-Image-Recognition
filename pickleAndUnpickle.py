@@ -1,7 +1,6 @@
+
 import cv2
 import _pickle as cPickle
-
-
 
 def pickle_keypoints(keypoints, descriptors):
     i = 0
@@ -12,18 +11,16 @@ def pickle_keypoints(keypoints, descriptors):
         temp_array.append(temp)
     return temp_array
 
-
 """
 This code unpickels for 1 shape(1 image)
 """
 
-#=======================================================================================================================
+# =======================================================================================================================
 
 
 def unpickle_keypoints(shape):
     total = []
     try:
-        sumOfKey = 0
         for sub in shape:
             # if sub is None:
             #     continue
@@ -33,7 +30,6 @@ def unpickle_keypoints(shape):
                 temp_feature = cv2.KeyPoint(x=point[0][0], y=point[0][1], _size=point[1], _angle=point[2],
                                             _response=point[3], _octave=point[4], _class_id=point[5])
                 temp_descriptor = point[6]
-                # sumOfKey +=
                 keypoints.append(temp_feature)
                 descriptors.append(list(temp_descriptor))
             total.append([keypoints, descriptors])
@@ -41,7 +37,7 @@ def unpickle_keypoints(shape):
         pass
     return total
 
-#=======================================================================================================================
+# =======================================================================================================================
 
 
 def storeToFile(fileName, temp_array):

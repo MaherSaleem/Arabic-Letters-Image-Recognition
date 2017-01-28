@@ -44,7 +44,7 @@ def getBestMatching(path, keypoints_database, partitioningType, constantWindowPa
                 shapePartsKeypoints = unpickle_keypoints(
                     keypoints_database[fontIndex][charIndex][shapeIndex])  # M*N parts of a training image
                 # Comparing each part in the testing image with each part of the current training image
-                for i in range(n * m):
+                for i in range(len(ImagePartsKeyPoints_array)):
 
                     # TODO: MAHER's part
                     kp1, des1 = ImagePartsKeyPoints_array[i]

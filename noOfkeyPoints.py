@@ -1,14 +1,4 @@
-import cv2
-from addPadding import *
-from dividingImage import *
-from pickleAndUnpickle import *
-from testingAndTrainingPaths import *
-from settings import *
 from printDataBase import *
-from skimage.io import sift
-from matplotlib import pyplot as plt
-import random
-import operator
 
 
 def noOfKeypoints(keypoints_database,filename):
@@ -18,10 +8,14 @@ def noOfKeypoints(keypoints_database,filename):
         for charIndex, eachChar in enumerate(eachFont):
 
             for shapeIndex, eachShape in enumerate(eachChar):
-
-                shapePartsKeypoints,totalNoOfkeypoitns = unpickle_keypoints(
+                sum = 0
+                shapePartsKeypoints = unpickle_keypoints(
                     keypoints_database[fontIndex][charIndex][shapeIndex])  # M*N parts of a training image
 
                 trainingChar = getFontNameByIndex(fontIndex) + "-" + getCharByIndex(charIndex) + " " + getPostionByIndex(
                     shapeIndex)
-                file.write(str(trainingChar) +"\n" + str(totalNoOfkeypoitns)+"\n\n")
+
+                for i in range(len(shapePartsKeypoints)):
+                    kp2, des2 = shapePartsKeypoints[i]
+                    sum += len(kp2)
+                file.write(str(trainingChar) +"\n" + str(sum)+"\n\n")

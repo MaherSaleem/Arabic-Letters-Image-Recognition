@@ -30,7 +30,7 @@ shiftDirection = "H" if slidingWindowParameters["shiftDirection"] == 1 else "V"
 
 
 # ============================================================================================================================
-
+#
 # dividingMethod = "sliding"
 # keyPointsFileName = "keypoints_slidingWindow_w"+str(slidingWindowParameters["winWidth"])+"_h"+str(slidingWindowParameters["winHeight"])+\
 #                     "_sh"+str(slidingWindowParameters["shift"])+"_dir"+shiftDirection+".p"
