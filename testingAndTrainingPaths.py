@@ -12,7 +12,7 @@ def getTrainingImagesPaths(Model="Model(B)", Font="Simplified Arabic"):
 
     pathsAlph = []
 
-    for i in range(1, 30):
+    for i in range(1, 29):
         pathsForOneChar = []
 
         newpath2 = str(newpath) + str(i) + '\\'
@@ -50,9 +50,10 @@ def getTestingImagesPaths(Model="Model(B)", Font="Simplified Arabic"):
     newpath = "C:\\Users\zeiad\Documents\GitHub\\training data\Model(B)" + '\\' + str(Font) + '\\'
 
     pathsAlph = []
-    charTypes = ["b","i","bi","n"]
+    # charTypes = ["b","i","bi","n"]
 
-    for i in range(1, 30):
+    charTypes = ["n"]
+    for i in range(1, 29):
         pathsForOneChar = []
 
         newpath2 = str(newpath) + str(i) + '\\'
@@ -93,3 +94,7 @@ def getSubImageData(img, part):
     # cv2.waitKey(0)
 
     return img[x1:x2, y1:y2]
+
+
+# for i in getTrainingImagesPaths():
+#     print(i)

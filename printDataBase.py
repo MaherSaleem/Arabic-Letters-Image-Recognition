@@ -31,11 +31,11 @@ def getCharWithPositionFromPath (path):
 
 def getPostionByIndex(index):
 
-    postions = ["البداية" , "الوسط" , "النهاية" , "منعزل"]
+    postions = ["منعزل" , "البداية" , "الوسط" , "النهاية"]
     return postions[index]
 
 def getIndexByPosition(position):
-    postions = ["البداية", "الوسط", "النهاية", "منعزل"]
+    postions = ["منعزل" , "البداية" , "الوسط" , "النهاية"]
     return postions.index(position)
 
 def getFontNameByIndex(index):
@@ -94,6 +94,7 @@ def printdataBase(dataBaseName="keypoints.p" , verbos=True):
         #font = keypoints_database
         for charIndex , char in enumerate(font):
             for shapeIndex , shape in enumerate(char):
+                pos , shape = shape
                 print("<<Char is " , getCharByIndex(charIndex) , " " , getPostionByIndex(shapeIndex) , ">>" )
                 shape = unpickle_keypoints(shape)
                 for partIndex , part in enumerate(shape):
@@ -105,4 +106,6 @@ def printdataBase(dataBaseName="keypoints.p" , verbos=True):
                 print("="*100)
     print("#" * 130)
 
-# printdataBase(dataBaseName="keypoints.p" , verbos=False)
+# printdataBase(dataBaseName="keypoints_staticWindow_1SA.p" , verbos=False)
+# print(getPostionByIndex(0))
+

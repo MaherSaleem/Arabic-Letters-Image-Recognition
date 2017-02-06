@@ -115,6 +115,11 @@ def getMeasurementsForFamilies(aboveThresholdArray, ImagePath, numberOfFonts, Da
 
     exist = 0
     TP = 0
+    FP = 0
+    TN = 0
+    FN = 0
+    if len(aboveThresholdArray)<1 :
+        return TP, TN, FP, FN, exist
     # TP will be the number of entries in the array that are axactly the same as the query image (eventhough different font type)
     for key in aboveThresholdArray:
         charWithPosition=str(key).split("-")[1].split(" ")
@@ -136,7 +141,6 @@ def getMeasurementsForFamilies(aboveThresholdArray, ImagePath, numberOfFonts, Da
             TP +=1
             exist = 1
             # print(charWithPosition,"----",charString, testingGroupIndex)
-
     # FP will be the rest of the entries in the previous array
     FP = len(aboveThresholdArray)-TP
 
@@ -172,7 +176,9 @@ def getMeasurements(aboveThresholdArray, ImagePath, numberOfFonts, DataSetLength
 
     # TN = total number of testing dataset - (TP + FP + FN)
     TN = DataSetLength - (TP + FP + FN)
-
+    # if exist ==0:
+    #     print(charString)
+    #     print(aboveThresholdArray)
     return TP, TN, FP, FN , exist
 
 #=======================================================================================================================

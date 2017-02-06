@@ -10,7 +10,7 @@ from noOfkeyPoints import *
 
 
 
-# constructTrainingArray(fontsList, keyPointsFileName, dividingMethod, constantWindowParameters, slidingWindowParameters)
+constructTrainingArray(fontsList, keyPointsFileName, dividingMethod, constantWindowParameters, slidingWindowParameters)
 
 
 start_time =time.time()
@@ -19,7 +19,7 @@ keypoints_database = cPickle.load(open(keyPointsFileName, "rb"))
 databaseSize = getDatabaseSize(keypoints_database)
 
 
-testingPaths = getTestingImagesPaths(Model="Model(B)", Font="Tahoma")
+testingPaths = getTestingImagesPaths(Model="Model(B)", Font="Simplified Arabic")
 
 thresholdForNumberOfMatchedKeypoints = 7
 
@@ -54,10 +54,11 @@ for testingImagePathArray in testingPaths:
         #array of tuples: (key,value)
         numberOfMatchingWithEachTrainingCharArray = getBestMatching(testingImagePath, keypoints_database, dividingMethod,
                                                                     constantWindowParameters, slidingWindowParameters)
-
+        # print(numberOfMatchingWithEachTrainingCharArray)
 
         max=0
         for _,value in numberOfMatchingWithEachTrainingCharArray:
+            # print(value)
             if value>max:
                 max = value
         # if max==0:
@@ -90,7 +91,7 @@ for testingImagePathArray in testingPaths:
         normalMeasurements["totalFN"] += FN
         normalMeasurements["totalFP"] += FP
         normalMeasurements["totalExist"] += exist
-
+        # print("#"*50)
 end_time = time.time()
 
 executionTime = end_time - start_time
@@ -123,12 +124,19 @@ print("\nTOTAL EXECUTION TIME : %s seconds" % executionTime)
 #               "\nFAMILIES existence Accuracy: " + str(familiesMeasurements["totalExist"] / totalTests)+"\n"+"#"*30+"\n")
 #
 
+
+
+
+
+
+
+
 # NoOfkeyPointsFileName = "noOfKeypoints_staticWindow_3.txt"
 #
 # noOfKeypoints(keypoints_database,NoOfkeyPointsFileName)
 
 
-
+# printdataBase(dataBaseName=keyPointsFileName , verbos=False)
 
 
 
