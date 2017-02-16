@@ -3,6 +3,7 @@ import math
 import cv2
 import _pickle as cPickle
 import numpy as np
+from settings import *
 import re
 from pickleAndUnpickle import *
 
@@ -80,7 +81,7 @@ Verbos is used to enable or disable printing the keypoints and description
 
 def printdataBase(dataBaseName="keypoints.p" , verbos=True):
 
-    keypoints_database = cPickle.load(open(dataBaseName, "rb"))
+    keypoints_database = cPickle.load(open(databaseFolderName+dataBaseName, "rb"))
     # for fontIndex, font in enumerate(keypoints_database): # TODO enable that later
     font = keypoints_database
     # printFont(font , 7 , verbos) # 7 is simplified arabic index

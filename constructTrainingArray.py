@@ -10,6 +10,7 @@ from matplotlib import pyplot as plt
 
 
 def constructTrainingArray(fontsList, keyPointsFileName, partitioningType, constantWindowParameters, slidingWindowParameters):
+
     print("Constructing the database...")
     trainingDataPathsForAllFonts = []
     for font in fontsList:
@@ -56,5 +57,5 @@ def constructTrainingArray(fontsList, keyPointsFileName, partitioningType, const
             listForFont.append(listForChar)
         listForAllFonts.append(listForFont)
     # print(listForAllFonts[0][1])
-    storeToFile(keyPointsFileName, listForAllFonts)
+    storeToFile(databaseFolderName+keyPointsFileName, listForAllFonts)
     print("Database is successfully constructed.")

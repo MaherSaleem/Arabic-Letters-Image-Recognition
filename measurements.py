@@ -1,5 +1,5 @@
 from printDataBase import *
-
+import xlsxwriter
 
 def getDatabaseSize(keypoints_database):
 
@@ -98,7 +98,7 @@ def evaluateResults(TP , TN , FP , FN):
     print("Accuracy = " ,"{0:.3f}".format(a))
     print("Recall  =" ,"{0:.3f}".format(r) )
     print("Precision = " , "{0:.3f}".format(p) )
-    return a,r,p # returned if they needed in any stage
+    return float("{0:.3f}".format(a)),float("{0:.3f}".format(r)),float("{0:.3f}".format(p)) # returned if they needed in any stage
 
 # evaluateResults(50,20,30,10)
 
@@ -182,3 +182,82 @@ def getMeasurements(aboveThresholdArray, ImagePath, numberOfFonts, DataSetLength
     return TP, TN, FP, FN , exist
 
 #=======================================================================================================================
+
+
+def writeToexcelFile(fileName,allNormalMeasurementsToWrite,allFamiliesMeasurementsToWrite):
+
+    if os.path.isfile(fileName):
+        os.remove(fileName)
+    # Create a workbook and add a worksheet.
+    headers = ["TP","TN","FP","FN","Accuracy","Recall","Precision","accuracy of existence", "executionTime"]
+    workbook = xlsxwriter.Workbook(fileName+'.xlsx')
+    worksheet = workbook.add_worksheet()
+
+
+    #drawing the header:
+    row = 0
+    worksheet.set_column(0, 10, 20)
+    normalFamily="Normal"
+    for i in range(0,2):
+
+        merge_format = workbook.add_format({
+            'bold': 1,
+            'border':1,
+            'align': 'center',
+            'valign': 'vcenter',
+            'bg_color' : '#963636'})
+        format2 = workbook.add_format({
+            'bold': 1,
+            'border': 1,
+            'align': 'center',
+            'valign': 'vcenter',
+            'bg_color': '#8DB4E2'})
+        format3 = workbook.add_format({
+            'bold': 1,
+            'border': 1,
+            'align': 'center',
+            'valign': 'vcenter',
+            'bg_color': '#D9D9D9'})
+        format4 = workbook.add_format({
+            'border': 1,
+            'align': 'center',
+            'valign': 'vcenter',
+            'bg_color': '#F2F2F2'})
+
+        worksheet.write(row,0,"Using SIFT",merge_format)
+        # merge_format.set_bg_color('#8DB4E2')
+        worksheet.merge_range(row, 1, row, len(headers), normalFamily,format2)
+        row+=1
+        # merge_format.set_bg_color('#D9D9D9')
+        worksheet.write(row, 0, "Description",format3)
+        for index,head in enumerate(headers):
+            worksheet.write(row, 1+index, head, format3)
+
+        row+=1
+        if i ==1:
+            tmp = allFamiliesMeasurementsToWrite
+        else:
+            tmp = allNormalMeasurementsToWrite
+        for key, measurement in tmp.items(): #measurement is one row
+            col=0
+            worksheet.write(row, col, key, format3)
+            col+=1
+
+            # measurements = measurement[0]
+            # a = measurement[1]
+            # r = measurement[2]
+            # p = measurement[3]
+            # aOfEx = measurement[4]
+            # exTime = measurement[5]
+
+            for measure in measurement:
+                worksheet.write(row, col, measure,format4)
+                col+=1
+            row+=1
+
+
+        row+=3
+        normalFamily="Families"
+
+
+    workbook.close()
