@@ -14,6 +14,8 @@ measurementPath = "measurements_excel/"+algorithm+"/"
 
 if not os.path.exists(measurementPath):
     os.makedirs(measurementPath)
+if not os.path.exists(databaseFolderName):
+    os.makedirs(databaseFolderName)
 
 allNormalMeasurementsToWrite_constant={}
 allFamiliesMeasurementsToWrite_constant={}
