@@ -196,7 +196,7 @@ def writeToexcelFile(fileName,allNormalMeasurementsToWrite,allFamiliesMeasuremen
 
     #drawing the header:
     row = 0
-    worksheet.set_column(0, 10, 20)
+    worksheet.set_column(0, 4, 20)
     normalFamily="Normal"
     for i in range(0,2):
 

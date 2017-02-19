@@ -91,29 +91,33 @@ def applyTesting(testingFont, keyPointsFileName, dividingMethod, constantWindowP
             # print("#"*50)
     end_time = time.time()
 # ==============================================================================================================================================================
-#     folderName=""
-#
-#     if dividingMethod == "sliding":
-#
-#         shiftDirection = ""
-#         shiftDirection = "H" if slidingWindowParameters["shiftDirection"] == 1 else "V"
-#
-#         folderName = "H" + str(slidingWindowParameters['winHeight']) + "_W" + str(
-#             slidingWindowParameters['winWidth']) + "_Sh" \
-#                  + str(slidingWindowParameters['shift']) + "_Dir" + shiftDirection
-#
-#
-#
-#     else:
-#         folderName = "M" + str(constantWindowParameters['m']) + "_N" + str(constantWindowParameters['n'])
-#     path = "measurements_excel/" + dividingMethod+"/"+folderName
-#
-#     if not os.path.exists(path):
-#         os.makedirs(path)
-#
-#     else:
-#         shutil.rmtree(path)
-#         os.makedirs(path)
+    folderName=""
+
+    if dividingMethod == "sliding":
+
+        shiftDirection = ""
+        shiftDirection = "H" if slidingWindowParameters["shiftDirection"] == 1 else "V"
+
+        folderName = "H" + str(slidingWindowParameters['winHeight']) + "_W" + str(
+            slidingWindowParameters['winWidth']) + "_Sh" \
+                 + str(slidingWindowParameters['shift']) + "_Dir" + shiftDirection
+
+
+
+    else:
+        folderName = "M" + str(constantWindowParameters['m']) + "_N" + str(constantWindowParameters['n'])
+    path = "numberOfKeypoints/" + dividingMethod+"/"
+
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+    else:
+        shutil.rmtree(path)
+        os.makedirs(path)
+
+    # NoOfkeyPointsFileName = "noOfKeypoints_"+dividingMethod+"_"+folderName
+    #
+    noOfKeypoints(keypoints_database, path+folderName)
 
     executionTime = end_time - start_time
     print("NORMAL MEASUREMENTS:(databaseSize="+str(databaseSize)+")")
@@ -168,9 +172,7 @@ def applyTesting(testingFont, keyPointsFileName, dividingMethod, constantWindowP
 
 
 
-    # NoOfkeyPointsFileName = "noOfKeypoints_staticWindow_3.txt"
-    #
-    # noOfKeypoints(keypoints_database,NoOfkeyPointsFileName)
+
 
 
     # printdataBase(dataBaseName=keyPointsFileName , verbos=False)

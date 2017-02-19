@@ -67,8 +67,8 @@ constantWindows = ["1_1","2_2","3_3","4_4"] #m_n
 # slidingWindows = ["30_10_5_1","30_15_5_1","30_5_2_1","30_5_3_1","30_10_5_0","30_15_5_0","30_5_2_0","30_5_3_0"] #H_W_Sh_Dir
 slidingWindows = ["30_10_5_1","30_15_5_1","30_10_5_0","30_15_5_0"] #H_W_Sh_Dir
 
-# slidingWindows = []
-# constantWindows = ["1_1"]
+slidingWindows = []
+constantWindows = ["1_1"]
 fontsList = ["AdvertisingBold", "andalus", "Arabic Transparent", "DecoType Naskh", "DecoType Thuluth", "Diwani Letter",
              "M Unicode Sara", "Simplified Arabic"]
 
