@@ -5,7 +5,7 @@ import xlsxwriter
 def noOfKeypoints(keypoints_database,filename):
     if os.path.isfile(filename):
         os.remove(filename)
-    headers = ["Character","Position","Font"]
+    headers = ["Character","Position","Font","# keypoints"]
     # print(keypoints_database)
 
     workbook = xlsxwriter.Workbook(filename + '.xlsx')
@@ -29,8 +29,9 @@ def noOfKeypoints(keypoints_database,filename):
 
             for shapeIndex, eachShape in enumerate(eachChar):
                 sum = 0
+                pos, eachShape = eachShape
                 shapePartsKeypoints = unpickle_keypoints(
-                    keypoints_database[fontIndex][charIndex][shapeIndex])  # M*N parts of a training image
+                    keypoints_database[fontIndex][charIndex][shapeIndex][1])  # M*N parts of a training image
 
                 trainingChar = getFontNameByIndex(fontIndex) + "-" + getCharByIndex(charIndex) + " " + getPostionByIndex(
                     shapeIndex)
